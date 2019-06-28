@@ -1,10 +1,32 @@
 <% include partials/header %>
 
-<% campgrounds.forEach(function(camp) { %>
-    <ul>
-        <p><%= camp.name  %></p>
-        <img src= <%= camp.image %> width="500" height="300">
-    </ul>
-<% }) %>
+<div class="container">
+
+    <header class="jumbotron">
+        <div class="container">
+            <h2>WELCOME TO YELPCAMP!</h2>
+            <p>This is a display for camps from users all over the world!</p>
+            <p>
+              <a class="btn btn-primary btn-small" href="/camps/new">ADD A NEW CAMP!</a>
+            </p>
+        </div>
+    </header>
+
+    <div class="row text center" style="display:flex flex-wrap:wrap; ">
+        <% campgrounds.forEach(function(camp) { %>
+          <ul>
+              <div class="col-md-3 col-sm-6">
+                  <div class="thumbnail">
+                      <img src= <%= camp.image %> >
+                      <div class="caption">
+                          <h4><%= camp.name %></h4>
+                      </div>
+                  </div>
+              </div>
+          </ul>
+        <% }) %>
+    </div>
+
+</div>
 
 <% include partials/footer %>
