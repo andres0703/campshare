@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router({mergeParams: true})
 var Camp = require('../models/camp')
 var Comment = require('../models/comment')
+var User = require('../models/user');
 var passport = require('passport')
 
 router.get('/', function (req, res) {
