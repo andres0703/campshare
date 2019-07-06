@@ -3,9 +3,16 @@ const keys = require('../config/keys')
 mongoose.connect(keys.mongoUri, { useNewUrlParser: true })
 
 var campSchema = new mongoose.Schema({
-	  name: String,
+	name: String,
   image: String,
   description: String,
+	author: {
+		id: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User'
+		},
+		username: String
+	},
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,

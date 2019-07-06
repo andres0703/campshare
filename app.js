@@ -12,12 +12,16 @@ const seedDB = require('./seed.js')
 const commentRoutes = require('./routes/comments')
 const campRoutes = require('./routes/camps')
 const indexRoutes = require('./routes/index')
+const methodOverride = require("method-override")
 
 app.set('view engine', 'ejs')
 app.use(bodyParser.urlencoded({	extended: true }))
+app.use(methodOverride("_method"))
+app.use(express.static(__dirname + "/public"));
+
 
 // seed the database
-seedDB()
+//seedDB()
 
 // passport configuration
 app.use(require('express-session')({
