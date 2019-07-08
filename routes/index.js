@@ -4,6 +4,7 @@ var Camp = require('../models/camp')
 var Comment = require('../models/comment')
 var User = require('../models/user');
 var passport = require('passport')
+var flash = require('connect-flash')
 
 router.get('/', function (req, res) {
   res.render('homepage')
@@ -17,10 +18,12 @@ router.post('/register', function (req, res) {
   var newUser = new User({ username: req.body.username})
   User.register(newUser, req.body.password, function (err, user) {
     if (err) {
-      console.log('error')
+      req.flash('message', err.message)
       console.log(err)
+      res.render('register', {message: req.flash('message')})
     } else {
       passport.authenticate('local')(req, res, function () {
+        req.flash('message', 'Welcome to Campshared ' + user.username),
         res.redirect('/camps')
       })
     }
@@ -28,17 +31,19 @@ router.post('/register', function (req, res) {
 })
 
 router.get('/login', function (req, res) {
-  res.render('login')
+  res.render('login', {message: req.flash('message')})
 })
 
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/camps',
-  failureRedirect: '/login'
+  failureRedirect: '/login',
+  failureFlash: true
 }))
 
 router.get('/logout', function (req, res) {
   req.logout()
-  res.redirect('/')
+  req.flash('message', 'Logged you out!')
+  res.redirect('/camps')
 })
 
 module.exports = router

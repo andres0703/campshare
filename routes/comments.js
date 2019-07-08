@@ -3,8 +3,9 @@ const express = require('express')
 const router = express.Router({mergeParams: true})
 const Camp = require('../models/camp')
 const Comment = require('../models/comment')
+const middlewareObj = require('../middleware/index')
 
-router.post('/', isLoggedIn, function (req, res) {
+router.post('/', middlewareObj.isLoggedIn, function (req, res) {
   Camp.findById(req.params.id, function (err, campFound) {
     if (err) {
       redirect('/camps')
@@ -24,13 +25,13 @@ router.post('/', isLoggedIn, function (req, res) {
 router.get('/', function (req, res) {
 })
 
-router.get('/new', isLoggedIn, function (req, res) {
+router.get('/new', middlewareObj.isLoggedIn, function (req, res) {
   Camp.findById(req.params.id, function (err, campFound) {
     res.render('comments/new', {camp: campFound})
   })
 })
 
-router.get('/:comment_id/edit', checkCommentOwner, function(req, res) {
+router.get('/:comment_id/edit', middlewareObj.checkCommentOwner, function(req, res) {
   Comment.findById(req.params.comment_id, function(err, commentFound) {
     if (err) {
       console.log(err)
@@ -40,7 +41,7 @@ router.get('/:comment_id/edit', checkCommentOwner, function(req, res) {
   })
 })
 
-router.put('/:comment_id', checkCommentOwner, function(req, res) {
+router.put('/:comment_id', middlewareObj.checkCommentOwner, function(req, res) {
   Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err) {
     if (err) {
       console.log(err)
@@ -49,7 +50,7 @@ router.put('/:comment_id', checkCommentOwner, function(req, res) {
   res.redirect('/camps/' + req.params.id)
 })
 
-router.delete('/:comment_id', checkCommentOwner, function(req, res) {
+router.delete('/:comment_id', middlewareObj.checkCommentOwner, function(req, res) {
   Comment.findByIdAndRemove(req.params.comment_id, function(err) {
     if (err) {
       console.log("Delete error")
@@ -59,30 +60,5 @@ router.delete('/:comment_id', checkCommentOwner, function(req, res) {
     }
   })
 })
-
-function isLoggedIn (req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
-  res.redirect('/login')
-}
-
-function checkCommentOwner(req, res, next) {
-  if (req.isAuthenticated()) {
-    Comment.findById(req.params.comment_id, function(err, commentFound) {
-      if (err) {
-        console.log(err)
-      } else {
-        if (commentFound.author.id.equals(req.user.id)) {
-          next()
-        } else {
-          res.redirect("/camps/" + req.params.id);
-        }
-      }
-    })
-  } else {
-    res.redirect("/login")
-  }
-}
 
 module.exports = router
