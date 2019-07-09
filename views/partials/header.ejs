@@ -5,31 +5,32 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="/stylesheets/main.css">
     </header>
-    <body>
+    <body class="d-flex flex-column">
+      <div id="page-content">
 
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/">CAMPSHARED</a>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">CAMPSHARED</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <% if (!curUser) { %>
+                            <li><a href="/login">Log in</a></li>
+                            <li><a href="/register">Sign Up</a></li>
+                        <% } else { %>
+                            <li><a href="#">logged in as <%= curUser.username %></a></li>
+                            <li><a href="/logout">Log out</a></li>
+                        <% } %>
+                    </ul>
+                </div>
             </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <% if (!curUser) { %>
-                        <li><a href="/login">Log in</a></li>
-                        <li><a href="/register">Sign Up</a></li>
-                    <% } else { %>
-                        <li><a href="#">logged in as <%= curUser.username %></a></li>
-                        <li><a href="/logout">Log out</a></li>
-                    <% } %>
-                </ul>
-            </div>
-        </div>
-    </nav>
+        </nav>
 
-    <div class="container">
-      <% if (message && message.length > 0) { %>
-        <div class="alert alert-danger" role="alert">
-          <%= message %>
+        <div class="container">
+          <% if (message && message.length > 0) { %>
+            <div class="alert alert-danger" role="alert">
+              <%= message %>
+            </div>
+          <% } %>
         </div>
-      <% } %>
-    </div>
